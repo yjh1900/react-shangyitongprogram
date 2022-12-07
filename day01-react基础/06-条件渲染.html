@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      .xxx {
+        color: red;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root"></div>
+
+    <script src="./js/react.development.js"></script>
+    <script src="./js/react-dom.development.js"></script>
+    <script src="./js/babel.min.js"></script>
+
+    <script type="text/babel">
+      let age = 19
+      // const div = (
+      //   <div>
+      //     {age >= 18 ? <h1>海静喜欢的电影</h1> : <h1>未成年看的动画片</h1>}
+      //   </div>
+      // )
+      let flag = true
+      const div = (
+        <div>
+          {/*{flag ? <h1>海静是一个lsp</h1> : ''}*/}
+          {flag && <h1>海静是一个lsp</h1>}
+        </div>
+      )
+      ReactDOM.render(div, document.getElementById('root'))
+    </script>
+  </body>
+</html>
