@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      .xxx {
+        color: red;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root"></div>
+
+    <script src="./js/react.development.js"></script>
+    <script src="./js/react-dom.development.js"></script>
+    <script src="./js/babel.min.js"></script>
+
+    <script type="text/babel">
+      function callback(e) {
+        // 这个e不是DOM阶段认识的事件对象.这个e是react里面提供的合成事件
+        // 合成事件其实就是对于DOM阶段学习到的事件对象的包装
+        // 但是使用和事件对象一样,并且交流过程中,还是习惯叫事件对象
+        // e.target
+        // e.srcElement.
+        // console.log('触发了', e)
+        // console.log('触发了', e.target)
+        console.log(this)
+      }
+      const div = (
+        <div
+          onClick={callback}
+          // onMouseEnter={function () {
+          //   console.log('鼠标移入了')
+          // }}
+        >
+          123
+        </div>
+      )
+      ReactDOM.render(div, document.getElementById('root'))
+
+      // div的真实dom.addEventListener('click', function () {
+          // callback.apply(undefined)
+      // })
+    </script>
+  </body>
+</html>

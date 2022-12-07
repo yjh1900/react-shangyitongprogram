@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      .xxx {
+        color: red;
+      }
+      
+    </style>
+  </head>
+  <body>
+    <div id="root"></div>
+
+    <script src="./js/react.development.js"></script>
+    <script src="./js/react-dom.development.js"></script>
+    <script src="./js/babel.min.js"></script>
+
+    <script type="text/babel">
+      const div = (
+        // 注意: 1. 写行内样式时,如果属性有-.改写成小驼峰
+        // 2. 如果值的单位是px.则px可以忽略
+        <div
+          className="xxx"
+          style={{ fontSize: 30, backgroundColor: 'green', height: '10rem' }}
+        >
+          123
+        </div>
+      )
+      ReactDOM.render(div, document.getElementById('root'))
+    </script>
+  </body>
+</html>
