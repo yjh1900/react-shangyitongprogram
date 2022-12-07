@@ -5,9 +5,21 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
+    <style>
+      .one {
+        background-color: green;
+      }
+      .two {
+        background-color: pink;
+      }
+    </style>
   </head>
   <body>
-    <script>
+    <div id="root"></div>
+    <script src="./js/react.development.js"></script>
+    <script src="./js/react-dom.development.js"></script>
+    <script src="./js/babel.min.js"></script>
+    <script type="text/babel">
       /*
       需求：实现评论列表功能
         - 如果有评论数据，就展示列表结构 li（ 列表渲染 ）要包含a标签
@@ -22,6 +34,35 @@
         { id: 2, name: 'rose', content: 'jack, you see you, one day day' },
         { id: 3, name: 'tom', content: 'jack,。。。。。' },
       ]
+      const ul = (
+        <div>
+          {list.length ? (
+            <ul>
+              {list.map((item) => {
+                return (
+                  <li key={item.id} style={{ backgroundColor: 'yellow' }}>
+                    <a
+                      href=""
+                      onClick={function (e) {
+                        e.preventDefault()
+                        console.log(e.target.innerText)
+                        // return false 无效,因为我们写的这个函数不是真正短时间处理函数. return false只在真正的事件处理函数中有效
+                      }}
+                    >
+                      <h3 className="one">{item.name}</h3>
+                      <p className="two">{item.content}</p>
+                    </a>
+                  </li>
+                )
+              })}
+            </ul>
+          ) : (
+            <h1>暂无评论!</h1>
+          )}
+        </div>
+      )
+
+      ReactDOM.render(ul, document.getElementById('root'))
     </script>
   </body>
 </html>
