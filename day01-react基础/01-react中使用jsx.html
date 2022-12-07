@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <!-- 1. 在html中写死一个根标签 -->
+    <div id="root"></div>
+
+    <!-- 2. 引入react和react-dom 
+        注意: 一定要先引入react,后引入react-dom. 因为react-dom依赖于react
+        react.js提供了React对象
+        react-dom.js提供了ReactDOM对象
+    -->
+    <script src="./js/react.development.js"></script>
+    <script src="./js/react-dom.development.js"></script>
+    <!-- babel的作用: 1. 处理js的兼容性问题 2. 可以将我们在js里面写的标签,编译成React.creatElement -->
+    <script src="./js/babel.min.js"></script>
+
+    <!-- 3. 写js代码,根据数据,动态的创建dom对象 -->
+    <script type="text/babel">
+      let obj = { name: 'hj', info: 'lsp' }
+      //   规定: div>h1{name}+p#one{info}
+      //   document.createElement() 创建出来的就是一个真正的dom对象
+
+      // JSX(javascript xml) 声明式
+      const div = (
+        <div>
+          <h1>{obj.name}</h1>
+          <p id="one">{obj.info}</p>
+        </div>
+      )
+
+      // 作用: 1. 根据虚拟dom自动帮我们创建真实dom 2. 将创建好的真实dom插入到根标签中
+      ReactDOM.render(div, document.getElementById('root'))
+    </script>
+  </body>
+</html>
