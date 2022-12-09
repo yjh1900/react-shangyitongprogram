@@ -9,8 +9,43 @@
   <body>
     <aaa>123</aaa>
     <script>
-      const obj = { name: 'zs' }
-      const { name } = obj
+      // const obj = { name: 'zs' }
+      // const { name } = obj
+
+      // function Person(name) {
+      //   this.name = name
+      //   // this.say = function () {
+      //   //   console.log(this.name)
+      //   // }
+      // }
+
+      // Person.prototype = {
+      //   say: function () {
+      //     console.log(this.name)
+      //   },
+      // }
+
+      // const p1 = new Person('zs')
+      // const p2 = new Person('ls')
+      // console.log(p1, p2)
+      // p1.say()
+      // p2.say()
+
+      class Person {
+        constructor(name) {
+          this.name = name //私有数据
+        }
+        // 原型上的数据(公共的)
+        say() {
+          console.log(this.name)
+        }
+      }
+
+      const p1 = new Person('zs')
+      const p2 = new Person('ls')
+      console.log(p1, p2)
+      p1.say()
+      p2.say()
     </script>
   </body>
 </html>
