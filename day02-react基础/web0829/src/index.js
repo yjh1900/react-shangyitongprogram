@@ -31,8 +31,5 @@ import App from './App'
 const root = ReactDOM.createRoot(document.getElementById('root'))
 root.render(
   // 使用组件的代码写在哪里,则组件中的jsx结构就渲染在哪里
-
   <App></App>
-  // // 开启严格模式
-  // <React.StrictMode></React.StrictMode>
 )
