@@ -25,7 +25,7 @@ export default class Count extends Component {
             // setState执行之后,把修改c的任务放到队列中,然后继续执行主线程的代码.主线程代码执行完毕之后,从队列中取出修改c的任务执行,当c的值被修改了之后,render函数重新执行,页面就看到最新的结果了
             // 作用: 1. 修改state数据 2. 让组件更新(render执行)
             this.setState({
-              c: this.state.c,
+              c: this.state.c + 1,
             })
 
             console.log(this.state.c)
