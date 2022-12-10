@@ -5,9 +5,10 @@ export default class List extends Component {
   render() {
     return (
       <ul className="todo-main">
-        <Item></Item>
-        <Item></Item>
-        <Item></Item>
+        {this.props.todos.map((item) => {
+          return <Item key={item.id} todo={item}></Item>
+        })}
+        {/* [<Item todo={{todoName:'吃饭'}}/>, <Item todo={{todoName:'睡觉'}}/>] */}
       </ul>
     )
   }
