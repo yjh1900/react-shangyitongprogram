@@ -1,17 +1,19 @@
 import React, { Component } from 'react'
-import List from './components/List'
-
+import Header from './components/Header/Header'
+import List from './components/List/List'
+import Footer from './components/Footer/Footer'
+import './App.css'
 export default class App extends Component {
   render() {
     return (
-      <div id="app">
-        {/* <List
-          list={[
-            { id: 1, name: 'hj', info: 'lsp' },
-            { id: 2, name: '张涛', info: 'lsp2' },
-          ]}
-        ></List> */}
-        <List></List>
+      <div className="todo-container">
+        <div className="todo-wrap">
+          <Header></Header>
+          <div>
+            <List></List>
+            <Footer></Footer>
+          </div>
+        </div>
       </div>
     )
   }
