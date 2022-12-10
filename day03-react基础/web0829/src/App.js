@@ -19,7 +19,7 @@ export default class App extends Component {
       },
     ],
   }
-
+  // 添加任务
   addTodo = (todoName) => {
     // 根据任务名,创建任务对象
     const todo = {
@@ -40,6 +40,49 @@ export default class App extends Component {
       todos: newTodos,
     })
   }
+
+  // 修改任务
+  updateTodo = (id) => {
+    // console.log(id)
+    // 遍历state里面的todos数组,遍历的过程中,找到了指定的对象,修改对象里面的isDone即可
+    const newTodos = this.state.todos.map((item) => {
+      if (item.id === id) item.isDone = !item.isDone
+      return item
+    })
+
+    this.setState({
+      todos: newTodos,
+    })
+  }
+
+  // 删除一条任务
+  deleteTodo = (id) => {
+    // 删除数组中的指定数据
+    const newTodos = this.state.todos.filter((item) => item.id !== id)
+    this.setState({
+      todos: newTodos,
+    })
+  }
+  // 点击全选复选框触发的函数
+  allCheck = (target) => {
+    // console.log(target)
+    const newTodos = this.state.todos.map((item) => {
+      item.isDone = target
+      return item
+    })
+
+    this.setState({
+      todos: newTodos,
+    })
+  }
+
+  // 清除所有完成任务
+  clearAllDone = () => {
+    const newTodos = this.state.todos.filter((item) => !item.isDone)
+    this.setState({
+      todos: newTodos,
+    })
+  }
   render() {
     // 注意: 父组件更新,下面的所有的子级组件,都会更新
     const { todos } = this.state
@@ -48,8 +91,16 @@ export default class App extends Component {
         <div className="todo-wrap">
           <Header addTodo={this.addTodo}></Header>
           <div>
-            <List todos={todos}></List>
-            <Footer></Footer>
+            <List
+              todos={todos}
+              updateTodo={this.updateTodo}
+              deleteTodo={this.deleteTodo}
+            ></List>
+            <Footer
+              todos={todos}
+              allCheck={this.allCheck}
+              clearAllDone={this.clearAllDone}
+            ></Footer>
           </div>
         </div>
       </div>
