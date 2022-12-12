@@ -1,6 +1,10 @@
 import React, { Component } from 'react'
 import './Item.css'
 export default class Item extends Component {
+  // 3.1 给Item组件定义状态.这个状态的值是什么,则编辑的文本框的内容就是什么
+  state = {
+    tN: '',
+  }
   updateHandle = (e) => {
     // console.log(e.target.checked) 可以获取到目标值
     // 将要修改的那条数据的id传递给App组件
@@ -25,15 +29,18 @@ export default class Item extends Component {
     this.props.updateEditId(
       e.target.innerText === '编辑' ? this.props.todo.id : undefined
     )
+    // 3.4 点击编辑按钮的时候,修改tN的值,tN的值变化了,则文本框的值也会发生变化.就实现了展示任务名的操作
+    this.setState({
+      tN: this.props.todo.todoName,
+    })
   }
   render() {
-    // const { id, todoName, isDone } = this.props.todo
+    const { tN } = this.state
     const {
       todo: { id, todoName, isDone },
-      updateTodo,
       editId,
     } = this.props
-
+    console.log('item', editId)
     return (
       <li>
         {/* 1.2 判断当前app组件中的editId和当前Item的id是否一致,如果一致,则展示文本框,如果不一致,则展示复选框和任务名 */}
@@ -48,7 +55,18 @@ export default class Item extends Component {
             <span className={isDone ? 'done' : ''}>{todoName}</span>
           </label>
         ) : (
-          <input type="text" />
+          // 3.2 使用tN状态给value属性赋值.让tN控制input的value值
+          <input
+            type="text"
+            value={tN}
+            // 3.3 绑定onChange事件,让用户输入的内容可以在文本框中显示
+            onChange={(e) => {
+              // console.log(e.target.value)
+              this.setState({
+                tN: e.target.value.trim(),
+              })
+            }}
+          />
         )}
 
         <button className="btn btn-danger" onClick={this.delHandle}>

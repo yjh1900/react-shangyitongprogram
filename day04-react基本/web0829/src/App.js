@@ -97,6 +97,7 @@ export default class App extends Component {
   render() {
     // 注意: 父组件更新,下面的所有的子级组件,都会更新
     const { todos, editId } = this.state
+
     return (
       <div className="todo-container">
         <div className="todo-wrap">
