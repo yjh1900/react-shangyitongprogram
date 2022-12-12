@@ -12,9 +12,19 @@ export default class Item extends Component {
   }
 
   //1.4 点击编辑按钮,将当前Item的id传递给app,让app将这个id赋值给editId
-  setEditId = () => {
+  setEditId = (e) => {
     // 将当前id,传递给app
-    this.props.updateEditId(this.props.todo.id)
+    // this.props.updateEditId(this.props.todo.id)
+
+    // 2.2 当点击了取消之后,要将editId的值改为undefined
+    // if (e.target.innerText === '编辑') {
+    //   this.props.updateEditId(this.props.todo.id)
+    // } else {
+    //   this.props.updateEditId(undefined)
+    // }
+    this.props.updateEditId(
+      e.target.innerText === '编辑' ? this.props.todo.id : undefined
+    )
   }
   render() {
     // const { id, todoName, isDone } = this.props.todo
@@ -54,7 +64,8 @@ export default class Item extends Component {
           }}
           onClick={this.setEditId}
         >
-          编辑
+          {/* 2.1 如果左侧出现文本框,则按钮文本显示取消. 否则展示编辑 */}
+          {editId !== id ? '编辑' : '取消'}
         </button>
       </li>
     )
