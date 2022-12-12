@@ -34,6 +34,17 @@ export default class Item extends Component {
       tN: this.props.todo.todoName,
     })
   }
+
+  // 修改任务名的函数
+  updateTodoName = (e) => {
+    // 判断是否是回车,以及文本框的内容是否为空
+    const value = e.target.value.trim()
+    if (e.keyCode !== 13 || !value) return 
+    // 修改App中指定某一条数据的todoName
+    // 参数: id  todoName(value或tN)
+    const id = this.props.todo.id
+    this.props.editTodoName(id, value)
+  }
   render() {
     const { tN } = this.state
     const {
@@ -66,6 +77,8 @@ export default class Item extends Component {
                 tN: e.target.value.trim(),
               })
             }}
+            // 4.1 给编辑的文本框注册键盘事件.
+            onKeyDown={this.updateTodoName}
           />
         )}
 

@@ -3,8 +3,9 @@ import Item from '../Item/Item'
 import './List.css'
 export default class List extends Component {
   render() {
-    const { updateTodo, deleteTodo, editId, updateEditId } = this.props
-   
+    const { updateTodo, deleteTodo, editId, updateEditId, editTodoName } =
+      this.props
+
     return (
       <ul className="todo-main">
         {this.props.todos.map((item) => {
@@ -16,6 +17,7 @@ export default class List extends Component {
               deleteTodo={deleteTodo}
               editId={editId}
               updateEditId={updateEditId}
+              editTodoName={editTodoName}
             ></Item>
           )
         })}

@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 本地缓存
+      //localStorage 和 sessionStorage
+      // 区别: localStorage存储的数据会一直在. 但是sessionStorage存储的数据只有一个会话的有效期
+      // 相同点: 都是只能存字符串
+      //存储数据
+      //   localStorage.setItem('键', 值) //
+      //获取数据
+      //  localStorage.getItem('键') 返回对应的值
+      // sessionStorage的存储和获取数据的方法和localStorage一样
+
+      localStorage.setItem('xxx', JSON.stringify({ name: 'zs' }))
+      console.log(JSON.parse(localStorage.getItem('xxx')))
+      console.log(JSON.parse(localStorage.getItem('yyy')))
+    </script>
+  </body>
+</html>

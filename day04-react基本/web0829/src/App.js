@@ -6,18 +6,8 @@ import './App.css'
 export default class App extends Component {
   //  状态提升
   state = {
-    todos: [
-      {
-        id: 1,
-        todoName: '吃饭',
-        isDone: false,
-      },
-      {
-        id: 2,
-        todoName: '睡觉',
-        isDone: true,
-      },
-    ],
+    // 5.2 获取本地缓存的数据,但是有可能没有数据,所以没有数据的时候设置为一个空数组
+    todos: JSON.parse(localStorage.getItem('todolist')) || [],
 
     // 1.1 在app组件中定义一个状态.用来标记哪个Item组件需要展示文本框
     // 存储要展示文本框的id
@@ -94,29 +84,52 @@ export default class App extends Component {
       editId: id,
     })
   }
+
+  // 4.2 定义函数,传递给Item.用来修改任务名
+  editTodoName = (id, todoName) => {
+    // 4.3 修改App中todos里面指定数据的任务名
+    const newTodos = this.state.todos.map((item) => {
+      // if (item.id === id) item.todoName = todoName
+      item.id === id && (item.todoName = todoName)
+      return item
+    })
+    this.setState({
+      todos: newTodos,
+      editId: undefined,
+    })
+  }
   render() {
     // 注意: 父组件更新,下面的所有的子级组件,都会更新
     const { todos, editId } = this.state
+
+    // 5.1 本地缓存
+    // 每一次修改完数据,都必须调用setState.数据修改完毕之后,一定都会执行render.所以直接在render中存储最新数据
+    localStorage.setItem('todolist', JSON.stringify(todos))
 
     return (
       <div className="todo-container">
         <div className="todo-wrap">
           <Header addTodo={this.addTodo}></Header>
-          <div>
-            {/* 1.3 将editId,先传递给List,然后再经过List传递给Item */}
-            <List
-              todos={todos}
-              updateTodo={this.updateTodo}
-              deleteTodo={this.deleteTodo}
-              editId={editId}
-              updateEditId={this.updateEditId}
-            ></List>
-            <Footer
-              todos={todos}
-              allCheck={this.allCheck}
-              clearAllDone={this.clearAllDone}
-            ></Footer>
-          </div>
+          {todos.length ? (
+            <div>
+              {/* 1.3 将editId,先传递给List,然后再经过List传递给Item */}
+              <List
+                todos={todos}
+                updateTodo={this.updateTodo}
+                deleteTodo={this.deleteTodo}
+                editId={editId}
+                updateEditId={this.updateEditId}
+                editTodoName={this.editTodoName}
+              ></List>
+              <Footer
+                todos={todos}
+                allCheck={this.allCheck}
+                clearAllDone={this.clearAllDone}
+              ></Footer>
+            </div>
+          ) : (
+            <h1>恭喜,暂无任务</h1>
+          )}
         </div>
       </div>
     )
