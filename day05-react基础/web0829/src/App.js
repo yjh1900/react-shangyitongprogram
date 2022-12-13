@@ -9,6 +9,7 @@ export default class App extends Component {
       <div>
         App
         {this.state.flag && <Test></Test>}
+        {/* <Test></Test> */}
         <button
           onClick={() => {
             this.setState({
