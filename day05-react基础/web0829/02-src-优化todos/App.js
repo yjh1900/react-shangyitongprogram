@@ -6,6 +6,10 @@ import List from './components/List/List'
 import Footer from './components/Footer/Footer'
 import './App.css'
 export default class App extends Component {
+  constructor() {
+    super()
+    console.log('app开始挂载了')
+  }
   //  状态提升
   state = {
     // 5.2 获取本地缓存的数据,但是有可能没有数据,所以没有数据的时候设置为一个空数组
@@ -68,47 +72,6 @@ export default class App extends Component {
   render() {
     // 注意: 父组件更新,下面的所有的子级组件,都会更新
     const { todos, editId } = this.state
-
-    // 5.1 本地缓存
-    // 每一次修改完数据,都必须调用setState.数据修改完毕之后,一定都会执行render.所以直接在render中存储最新数据
-    localStorage.setItem('todolist', JSON.stringify(todos))
-
-    // 订阅
-
-    PubSub.subscribe('add', (_, todoName) => {
-      // 根据任务名,创建任务对象
-      const todo = {
-        id: Date.now(),
-        todoName,
-        isDone: false,
-      }
-      // 按照下面的方式去数据,是可以实现功能的.但是不推荐这么写.原因要在后面的性能优化部分讲解
-      // this.state.todos.push(todo)
-      // this.setState({
-      //   todos:  this.state.todos
-      // })
-
-      // 推荐方式
-      const newTodos = [...this.state.todos]
-      newTodos.push(todo)
-      this.setState({
-        todos: newTodos,
-      })
-    })
-
-    PubSub.subscribe('update', (_, id) => {
-      // console.log(id)
-      // 遍历state里面的todos数组,遍历的过程中,找到了指定的对象,修改对象里面的isDone即可
-      const newTodos = this.state.todos.map((item) => {
-        if (item.id === id) item.isDone = !item.isDone
-        return item
-      })
-
-      this.setState({
-        todos: newTodos,
-      })
-    })
-
     return (
       <context.Provider value={editId}>
         <div className="todo-container">
@@ -136,5 +99,56 @@ export default class App extends Component {
         </div>
       </context.Provider>
     )
+  }
+
+  componentDidUpdate() {
+    // 5.1 本地缓存
+    // 每一次修改完数据,都必须调用setState.数据修改完毕之后,一定都会执行render.所以直接在render中存储最新数据
+    localStorage.setItem('todolist', JSON.stringify(this.state.todos))
+  }
+
+  componentDidMount() {
+    // 订阅
+    console.log('app挂载完毕了')
+
+    this.addId = PubSub.subscribe('add', (_, todoName) => {
+      // 根据任务名,创建任务对象
+      const todo = {
+        id: Date.now(),
+        todoName,
+        isDone: false,
+      }
+      // 按照下面的方式去数据,是可以实现功能的.但是不推荐这么写.原因要在后面的性能优化部分讲解
+      // this.state.todos.push(todo)
+      // this.setState({
+      //   todos:  this.state.todos
+      // })
+
+      // 推荐方式
+      const newTodos = [...this.state.todos]
+      newTodos.push(todo)
+      this.setState({
+        todos: newTodos,
+      })
+    })
+
+    this.updateId = PubSub.subscribe('update', (_, id) => {
+      // console.log(id)
+      // 遍历state里面的todos数组,遍历的过程中,找到了指定的对象,修改对象里面的isDone即可
+      const newTodos = this.state.todos.map((item) => {
+        if (item.id === id) item.isDone = !item.isDone
+        return item
+      })
+
+      this.setState({
+        todos: newTodos,
+      })
+    })
+  }
+
+  // 组件卸载,取消订阅
+  componentWillUnmount() {
+    PubSub.unsubscribe(this.addId)
+    PubSub.unsubscribe(this.updateId)
   }
 }

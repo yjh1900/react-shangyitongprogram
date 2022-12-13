@@ -3,6 +3,10 @@ import PubSub from 'pubsub-js'
 import context from '../../context'
 import './Item.css'
 export default class Item extends Component {
+  constructor() {
+    super()
+    console.log('item开始挂载了')
+  }
   // 3.1 给Item组件定义状态.这个状态的值是什么,则编辑的文本框的内容就是什么
   state = {
     tN: '',
@@ -108,5 +112,9 @@ export default class Item extends Component {
         }}
       </context.Consumer>
     )
+  }
+
+  componentDidMount() {
+    console.log('item挂载完毕了')
   }
 }

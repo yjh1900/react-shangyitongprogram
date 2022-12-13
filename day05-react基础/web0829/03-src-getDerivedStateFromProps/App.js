@@ -1,10 +1,11 @@
 import React, { Component } from 'react'
-import SnapShotDemo from './SnapShotDemo'
+import Test from './components/Test'
 export default class App extends Component {
   render() {
     return (
       <div>
-        <SnapShotDemo></SnapShotDemo>
+        App
+        <Test aaa={'test'}></Test>
       </div>
     )
   }
