@@ -1,20 +1,26 @@
 import React, { Component } from 'react'
-import withForm from './Far'
-import Registe from './Registe'
-import Login from './Login'
-// WithLogin和WithRegiste其实就是Far组件
-const WithLogin = withForm(Login)
-const WithRegiste = withForm(Registe)
+import Cat from './components/Cat'
+import Mouse from './components/Mouse'
+import Far from './Far'
 export default class App extends Component {
   render() {
     return (
       <div>
-        <WithLogin xxx={1} yyy={2} zzz={3}></WithLogin>
-        <WithRegiste></WithRegiste>
+        <h1>猫抓海静</h1>
+        {/* <Mouse></Mouse>
+        <Cat></Cat> */}
+        <Far
+          render={(state) => {
+            // state就是Far组件里面的状态,需要传递给子组件,所以通过props批量传递下去
+            return <Mouse {...state}></Mouse>
+          }}
+        ></Far>
+        <Far
+          render={(state) => {
+            return <Cat {...state}></Cat>
+          }}
+        ></Far>
       </div>
     )
   }
 }
-
-console.log(App.name)
-console.log(App.displayName)

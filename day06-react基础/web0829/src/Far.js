@@ -1,24 +1,29 @@
-// 这个组件.用来封装登录和注册中使用的公共的状态和逻辑
-import { Component } from 'react'
-// 返回的返回值,是定义的组件
-// Com 是需要使用公共状态和逻辑的子组件
-export default function withForm(Com) {
-  return class Far extends Component {
-    static displayName = 'With' + Com.name
-    state = {
-      username: '',
-      password: '',
-      repassword: '',
-    }
-    handle = (name) => (e) => {
-      this.setState({
-        [name]: e.target.value.trim(),
-      })
-    }
-    render() {
-      // 使用子组件,通过props将状态和逻辑传递下去
-      // 注意: 以后定义高阶组件代码的时候,一定要记得将props传递下去
-      return <Com {...this.state} handle={this.handle} {...this.props}></Com>
-    }
+import React, { Component } from 'react'
+
+export default class Far extends Component {
+  state = {
+    x: 0,
+    y: 0,
+  }
+
+  handleMove = (e) => {
+    // console.log(e)
+    this.setState({
+      x: e.clientX,
+      y: e.clientY,
+    })
+  }
+
+  componentDidMount() {
+    window.addEventListener('mousemove', this.handleMove)
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('mousemove', this.handleMove)
+  }
+  render() {
+    // this.props.render函数执行返回的结果就是Mouse或Cat组件实例.从而形成父子关系
+    // 这里写的this.state是实参,会传递给Far组件上写的render所对应的函数的形参
+    return this.props.render(this.state)
   }
 }
