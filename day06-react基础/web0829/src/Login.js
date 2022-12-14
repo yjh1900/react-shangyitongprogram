@@ -12,14 +12,11 @@ export default class Login extends Component {
   // }
   render() {
     const { username, password, handle } = this.props
+    console.log(this.props)
     return (
       <form>
         用户名:
-        <input
-          type="text"
-          value={username}
-          onChange={handle('username')}
-        />
+        <input type="text" value={username} onChange={handle('username')} />
         <br />
         密码:
         <input
