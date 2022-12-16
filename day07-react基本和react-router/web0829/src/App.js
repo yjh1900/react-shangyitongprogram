@@ -1,54 +1,52 @@
-import React, { useState, useEffect } from 'react'
-import PubSub from 'pubsub-js'
-import Header from './components/Header/Header'
-import List from './components/List/List'
-import Footer from './components/Footer/Footer'
-import Item from './components/Item/Item'
-import './App.css'
-export default function App() {
-  const [todos, setTodos] = useState(
-    JSON.parse(localStorage.getItem('todolist')) || []
-  )
+import React from 'react'
 
-  console.log('app的状态todos', todos)
-  // 挂载的时候,订阅.卸载的时候,清除订阅
-  useEffect(() => {
-    const addId = PubSub.subscribe('add', (topic, todoName) => {
-      // 根据任务名创建任务对象
+// class Test extends React.Component {
+//   render() {
+//     return <div>test</div>
+//   }
+// }
 
-      // setTodos(newTodos)
-      setTodos((todos) => {
-        // 这个todos一定是正确的最新的todos
-        const todo = {
-          todoName,
-          isDone: false,
-          // id的要求: 必须是整数,并且不能和已有的数据的id重复
-          // 新的id是数组中最后一条数据的id+1
-          id: todos.length ? todos[todos.length - 1].id + 1 : 1,
-        }
-        console.log('添加订里面的todos', todos)
-        const newTodos = [...todos]
-        newTodos.push(todo)
-        return newTodos 
-      })
-    })
-    return () => {
-      PubSub.unsubscribe(addId)
-    }
-  }, [])
+// function Test() {
+//   return <div>test</div>
+// }
+
+// const Test = React.forwardRef(function () {
+//   return <div>test</div>
+// })
+
+const Test = React.forwardRef(function (props, refObj) {
+  // props还是props数据
+  // refObj是传递过来的ref对象
+  console.log(props, refObj)
   return (
-    <div className="todo-container">
-      <div className="todo-wrap">
-        <Header></Header>
-        <div>
-          <List>
-            {todos.map((item) => (
-              <Item key={item.id} todo={item}></Item>
-            ))}
-          </List>
-          <Footer></Footer>
-        </div>
-      </div>
+    <div>
+      test
+      <input type="text" id="one" ref={refObj} />
     </div>
+  )
+})
+
+// refs
+// 作用: 获取标签的dom对象
+// const ref对象 = React.createRef()
+// ref对象.current属性可以获取到div的真实dom
+
+export default function App() {
+  // return <div ref={ref对象}>App</div>
+  // return <div ref={(node) => {}}>App</div>
+  const ref = React.createRef()
+  return (
+    <>
+      <Test ref={ref}></Test>
+      <button
+        onClick={() => {
+          // console.log(ref.current)
+          // 需求: 点击这个按钮,让Test组件里面的input标签获取焦点
+          ref.current.focus()
+        }}
+      >
+        按钮
+      </button>
+    </>
   )
 }
