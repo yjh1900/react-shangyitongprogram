@@ -12,8 +12,7 @@ export default function Login() {
             //跳转到 首页
             // navigate('/目标路径',配置对象)
             navigate('/home', {
-              // replace: true, // 替换历史记录
-              state: { name: 'zs' },
+              replace: true, // 替换历史记录
             }) //默认是添加历史记录
             // navigate(-1) //返回上一个页面.类似于BOM中history.go方法
           }, 2000)

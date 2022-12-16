@@ -16,7 +16,7 @@ export default function App() {
     <div>
       App
       {/* to属性的值 也可以忽略/*/}
-      {/* <NavLink
+      <NavLink
         to="home"
         className={({ isActive }) => {
           // 当我们切换路径的时候,这个回调会被执行
@@ -27,7 +27,7 @@ export default function App() {
         end // 嵌套路由被选中了,则当前导航不会高亮了
       >
         首页
-      </NavLink> */}
+      </NavLink>
       <NavLink
         to="login"
         style={({ isActive }) => {
@@ -35,7 +35,6 @@ export default function App() {
             ? { fontSize: 30, color: 'pink', background: 'none' }
             : {}
         }}
-        replace // 默认NavLink和Link都是添加历史记录,但是写上replace之后就变成了替换历史记录
       >
         登录页
       </NavLink>
@@ -48,15 +47,7 @@ export default function App() {
         <Route path="home" element={<Home></Home>}>
           {/* 如果嵌套路由的路径要简写,则无需写父级的路径.react-router-dom会自动帮我们拼接 */}
           <Route path="test1" element={<Test1></Test1>}></Route>
-          {/*定义路由参数
-           注意: /后面有:则:后面的就是路由参数. 路由参数定义了就必须传  */}
-          {/* <Route path="test2/:xxx" element={<Test2></Test2>}></Route> */}
-
-          {/* 如果路由参数是可选的.则要按照下面的方式书写: */}
-          <Route path="test2">
-            <Route path=":xxx" element={<Test2></Test2>}></Route>
-            <Route path="" element={<Test2></Test2>}></Route>
-          </Route>
+          <Route path="test2" element={<Test2></Test2>}></Route>
         </Route>
         <Route path="login" element={<Login></Login>}></Route>
       </Routes>
