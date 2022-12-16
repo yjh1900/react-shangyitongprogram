@@ -24,7 +24,6 @@ export default function App() {
           // 这个函数中return的结果会赋值给className
           return isActive ? 'xxx' : ''
         }}
-        end // 嵌套路由被选中了,则当前导航不会高亮了
       >
         首页
       </NavLink>
@@ -44,12 +43,12 @@ export default function App() {
       <Routes>
         {/* home的路由是一级路由 */}
         {/* 一级路由的路由规则写在哪里,则一级路由的组件就渲染在哪里 */}
-        <Route path="home" element={<Home></Home>}>
-          {/* 如果嵌套路由的路径要简写,则无需写父级的路径.react-router-dom会自动帮我们拼接 */}
-          <Route path="test1" element={<Test1></Test1>}></Route>
-          <Route path="test2" element={<Test2></Test2>}></Route>
+        <Route path="/home" element={<Home></Home>}>
+          {/* 嵌套进来的这些路由是二级路由 */}
+          <Route path="/home/test1" element={<Test1></Test1>}></Route>
+          <Route path="/home/test2" element={<Test2></Test2>}></Route>
         </Route>
-        <Route path="login" element={<Login></Login>}></Route>
+        <Route path="/login" element={<Login></Login>}></Route>
       </Routes>
       <hr />
     </div>

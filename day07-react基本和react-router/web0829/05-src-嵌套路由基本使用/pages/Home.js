@@ -13,7 +13,6 @@ export default function Home() {
     <div>
       首页
       <hr />
-      {/* 注意: Link或NavLink写路径的时候,/ 还是不要简写 */}
       <NavLink to="/home/test1">test1</NavLink>
       <NavLink to="/home/test2">test2</NavLink>
       <p>这是首页</p>
