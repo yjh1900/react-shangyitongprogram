@@ -5,6 +5,12 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
+    <!-- 正确的请求地址: /home => http://localhost:3000/bootstrap.css -->
+    <!-- /home/xxx  =>http://localhost:3000/home/bootstrap.css -->
+    <!-- /home/xxx/yyy  =>http://localhost:3000/home/xxx/bootstrap.css -->
+    <!-- 相对路径有网络交互的情况下,相对的是当前页面的的url地址 -->
+    <!-- 路径是以 / 开头,则表示直接从端口号后面开始 -->
+    <link rel="stylesheet" href="/bootstrap.css" />
   </head>
   <body>
     <div id="root"></div>
