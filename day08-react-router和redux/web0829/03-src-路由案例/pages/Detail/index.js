@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { useParams, useLocation } from 'react-router-dom'
-console.log('detail组件加载了')
+
 export default function Detail() {
   const { id } = useParams()
   // const {

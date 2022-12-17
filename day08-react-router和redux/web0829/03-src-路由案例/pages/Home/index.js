@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { Outlet, Link } from 'react-router-dom'
-console.log('home组件加载了')
+
 export default class Home extends Component {
   render() {
     return (
