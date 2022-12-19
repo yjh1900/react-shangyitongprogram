@@ -1,12 +1,12 @@
 import React from 'react'
 import store from '../redux/store'
-export default function Msg() {
+export default function Msg({ m, dispatch }) {
   return (
     <div>
-      {store.getState().msg}
+      {m}
       <button
         onClick={() => {
-          store.dispatch({ type: 'setMsg' })
+          dispatch({ type: 'setMsg' })
         }}
       >
         按钮
