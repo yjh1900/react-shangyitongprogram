@@ -4,11 +4,10 @@ import Msg from './components/Msg'
 
 export default function App() {
   return (
-    <div style={{ margin: 50 }}>
+    <div>
       App
       <hr />
       <Count></Count>
-      <hr />
       <Msg></Msg>
     </div>
   )

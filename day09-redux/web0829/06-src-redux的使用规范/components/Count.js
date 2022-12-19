@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { add, asyncAdd } from '../redux/actions'
+import { add } from '../redux/actions'
 
 export default function Count() {
   const count = useSelector((state) => {
@@ -10,7 +10,7 @@ export default function Count() {
 
   const dispatch = useDispatch()
   return (
-    <div>
+    <div style={{ margin: 50 }}>
       <p>{count}</p>
       <button
         onClick={() => {
@@ -25,14 +25,6 @@ export default function Count() {
         }}
       >
         +8
-      </button>
-      <button
-        onClick={() => {
-          
-          dispatch(asyncAdd())
-        }}
-      >
-        async + 2
       </button>
     </div>
   )
