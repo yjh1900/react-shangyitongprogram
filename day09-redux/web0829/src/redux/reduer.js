@@ -1,15 +1,16 @@
+import { ADD, SET_MSG } from './constants'
 const initState = { count: 0, msg: 'hello' }
 export default function reducer(state = initState, action) {
   switch (action.type) {
-    case 'add':
+    case ADD:
       return {
         ...state,
-        count: state.count + 1,
+        count: state.count + action.payload,
       }
-    case 'setMsg':
+    case SET_MSG:
       return {
         ...state,
-        msg: 'redux',
+        msg: action.payload,
       }
 
     default:

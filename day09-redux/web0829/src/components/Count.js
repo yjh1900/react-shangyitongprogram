@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
+import { add } from '../redux/actions'
 
 export default function Count() {
   const count = useSelector((state) => {
@@ -13,10 +14,17 @@ export default function Count() {
       <p>{count}</p>
       <button
         onClick={() => {
-          dispatch({ type: 'add' })
+          dispatch(add(1))
         }}
       >
-        +
+        +1
+      </button>
+      <button
+        onClick={() => {
+          dispatch(add(8)) // {type: 'add', payload}
+        }}
+      >
+        +8
       </button>
     </div>
   )

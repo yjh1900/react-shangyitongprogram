@@ -1,6 +1,6 @@
 import React from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-
+import { setMsg } from '../redux/actions'
 export default function Msg() {
   const msg = useSelector((state) => {
     return state.msg
@@ -11,10 +11,17 @@ export default function Msg() {
       {msg}
       <button
         onClick={() => {
-          dispatch({ type: 'setMsg' })
+          dispatch(setMsg('1111'))
         }}
       >
-        按钮
+        按钮1111
+      </button>
+      <button
+        onClick={() => {
+          dispatch(setMsg('yyyy'))
+        }}
+      >
+        按钮yyyy
       </button>
     </div>
   )
