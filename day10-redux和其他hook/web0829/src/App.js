@@ -1,15 +1,23 @@
 import React from 'react'
-import Count from './components/Count'
-import Msg from './components/Msg'
-
-export default function App() {
-  return (
-    <div style={{ margin: 50 }}>
-      App
-      <hr />
-      <Count></Count>
-      <hr />
-      <Msg></Msg>
-    </div>
-  )
+import Test from './Test'
+export default class App extends React.Component {
+  state = { count: 0 }
+  render() {
+    return (
+      <div>
+        App
+        <button
+          onClick={() => {
+            this.setState({
+              count: 1,
+            })
+          }}
+        >
+          按钮
+        </button>
+        <hr />
+        <Test count={this.state.count}></Test>
+      </div>
+    )
+  }
 }

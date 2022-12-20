@@ -1,6 +1,6 @@
 import React from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import zsSlice from './redux/zsSlice'
+import zsSlice, { asyncCount } from './redux/zsSlice'
 const { add, sub } = zsSlice.actions
 export default function Count() {
   const count = useSelector((state) => {
@@ -33,7 +33,13 @@ export default function Count() {
       >
         -3
       </button>
-      <button onClick={() => {}}>async + 2</button>
+      <button
+        onClick={() => {
+          dispatch(asyncCount('xxx'))
+        }}
+      >
+        async +
+      </button>
     </div>
   )
 }
