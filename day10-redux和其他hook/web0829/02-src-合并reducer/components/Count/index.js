@@ -1,10 +1,10 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import zsSlice from './redux/zsSlice'
-const { add, sub } = zsSlice.actions
+import { add, asyncAdd } from './redux/actions'
+
 export default function Count() {
   const count = useSelector((state) => {
-    // 这里的state是redux的所有数据
+    // 这里返回的结果,会赋值给useSelector的返回值
     return state.zs.count
   })
 
@@ -21,19 +21,18 @@ export default function Count() {
       </button>
       <button
         onClick={() => {
-          dispatch(add(8))
+          dispatch(add(8)) // {type: 'add', payload}
         }}
       >
         +8
       </button>
       <button
         onClick={() => {
-          dispatch(sub(3))
+          dispatch(asyncAdd())
         }}
       >
-        -3
+        async + 2
       </button>
-      <button onClick={() => {}}>async + 2</button>
     </div>
   )
 }
