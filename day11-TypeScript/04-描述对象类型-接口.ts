@@ -25,3 +25,12 @@ let obj: Iperson = {
 
 // obj.age.length
 // obj.name.length
+
+// 接口可以简写成下面这样的形式
+const obj2: {
+  name: string
+  age?: number
+} = {
+  name: 'zs',
+  age: 18,
+}
