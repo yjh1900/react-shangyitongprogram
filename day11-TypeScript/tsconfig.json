@@ -1,0 +1,6 @@
+{
+  "compilerOptions": {
+    // 当ts文件中存在类型问题时，不编译生成js文件
+    "noEmitOnError": true
+  }
+}
