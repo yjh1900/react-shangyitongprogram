@@ -18,9 +18,9 @@
 
 // const list: Element = document.querySelector('.xxx')
 // const lists = document.querySelectorAll('.xxx')
-interface Iarr {
-  xxx: string
-  yyy: number
-  zzz: boolean
-}
-let arr: Iarr[] = [{ xxx: '123', yyy: 8, zzz: false }]
+// interface Iarr {
+//   xxx: string
+//   yyy: number
+//   zzz: boolean
+// }
+// let arr: Iarr[] = [{ xxx: '123', yyy: 8, zzz: false }]
