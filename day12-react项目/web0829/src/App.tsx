@@ -1,6 +1,6 @@
 import React from 'react'
 import { Button, Spin } from 'antd'
-import './App.css'
+import './App.less'
 export default function App() {
   return (
     <div>
