@@ -1,6 +1,6 @@
 import React from 'react'
-import { Button, Checkbox, Form, Input, Space, Card, Table, Tag } from 'antd'
-import { SearchOutlined } from '@ant-design/icons'
+import { Button, Form, Input, Space, Card, Table, Tooltip } from 'antd'
+import { SearchOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons'
 // 这是ts中内置的和表格相关的一个ts类型
 import type { ColumnsType } from 'antd/es/table'
 
@@ -12,52 +12,71 @@ interface DataType {
   tags: string[]
 }
 
+// const columns: ColumnsType<DataType> = [
+//   {
+//     title: 'Name', // 决定了表头要展示的信息
+//     // 如果我们既写了dataIndex,又写了render.则dataIndex的值决定了render函数第一次参数接收到什么数据.比如此时写了name,则render函数中第一个参数就是每一个data数组中对象的name属性的值
+//     // 如果我们不写dataIndex,则render函数中第一个参数,就是data中的每一个数据对象
+//     dataIndex: 'address',
+//     key: 'name',
+//     // 1. 如果写了render属性,则这一列到底要展示什么数据,有render函数的返回值决定
+//     // 2. 如果不写render,只写了dataIndex,则这一列到底展示什么数据,有dataIndex的值决定.dataIndex的值应该是data数据中每一个对象的属性
+//     // render: (text, record, index) => {
+//     //   // text 收到了dataIndex的影响
+//     //   // record一定是data数组中的每一个数据对象
+//     //   // index 一定是data数组中的每一个数据对象的下标
+//     //   console.log(text, record, index)
+//     //   return 1
+//     // },
+//   },
+
+// ]
+
 const columns: ColumnsType<DataType> = [
   {
-    title: 'Name',
-    dataIndex: 'name',
-    key: 'name',
-    render: (text) => <a>{text}</a>,
+    title: '序号',
+    render(a, b, index) {
+      return index + 1
+    },
+    width: 80,
+    align: 'center', //让这一列的内容水平居中
   },
   {
-    title: 'Age',
-    dataIndex: 'age',
-    key: 'age',
+    title: '医院名称',
   },
   {
-    title: 'Address',
-    dataIndex: 'address',
-    key: 'address',
+    title: '医院编码',
   },
   {
-    title: 'Tags',
-    key: 'tags',
-    dataIndex: 'tags',
-    render: (_, { tags }) => (
-      <>
-        {tags.map((tag) => {
-          let color = tag.length > 5 ? 'geekblue' : 'green'
-          if (tag === 'loser') {
-            color = 'volcano'
-          }
-          return (
-            <Tag color={color} key={tag}>
-              {tag.toUpperCase()}
-            </Tag>
-          )
-        })}
-      </>
-    ),
+    title: 'api基础路径',
   },
   {
-    title: 'Action',
-    key: 'action',
-    render: (_, record) => (
-      <Space size="middle">
-        <a>Invite {record.name}</a>
-        <a>Delete</a>
-      </Space>
-    ),
+    title: '签名',
+  },
+  {
+    title: '联系人名称',
+  },
+  {
+    title: '联系人手机号',
+  },
+  {
+    title: '操作',
+    render() {
+      return (
+        <Space>
+          <Tooltip title="修改医院">
+            <Button icon={<EditOutlined />} type="primary"></Button>
+          </Tooltip>
+          <Tooltip title="删除医院">
+            <Button icon={<DeleteOutlined />} type="primary" danger></Button>
+          </Tooltip>
+        </Space>
+      )
+    },
+    // 这一列在右侧固定不动(不要胡写.到底在left和right.还是要看你的这一列本身在左还是右)
+    fixed: 'right',
+
+    width: 100, //控制这一列的宽度
   },
 ]
 
@@ -160,8 +179,19 @@ export default function HospitalSet() {
         </Button>
       </Space>
       {/* columns: 决定了表格中有多少列,以及每一列的表头是啥
-      dataSource:决定表格中要展示的数据  */}
-      <Table columns={columns} dataSource={data} />
+      dataSource:决定表格中要展示的数据 
+      bordered 给表格添加边框 
+      scroll 让表格可以滚动*/}
+      <Table
+        columns={columns}
+        dataSource={data}
+        bordered
+        scroll={{
+          // x 表示表格在水平方向滚动
+          // 1500代表可以滚动的距离
+          x: 1500,
+        }}
+      />
     </Card>
   )
 }
