@@ -1,8 +1,10 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Button, Form, Input, Space, Card, Table, Tooltip } from 'antd'
 import { SearchOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons'
 // 这是ts中内置的和表格相关的一个ts类型
 import type { ColumnsType } from 'antd/es/table'
+
+import { reqGetHospitalSets } from '@api/hospital/hospitalSet'
 
 interface DataType {
   key: string
@@ -103,7 +105,19 @@ const data: DataType[] = [
     tags: ['cool', 'teacher'],
   },
 ]
+
 export default function HospitalSet() {
+  const [hospitalSets, setHospitalSets] = useState([])
+  // useEffect的回调,是不能够被定义为异步函数的.解决办法.给异步函数外面再套一个函数
+  useEffect(() => {
+    async function xxx() {
+      // await promise对象, 则返回值就是promise成功之后的value值
+      const result = await reqGetHospitalSets(1, 5)
+      // console.log(result)
+      setHospitalSets(result.records)
+    }
+    xxx()
+  }, [])
   const onFinish = (values: any) => {
     console.log('Success:', values)
   }
