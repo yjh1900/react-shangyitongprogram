@@ -89,13 +89,20 @@ export default function HospitalSet() {
   // 注意: 定义状态的时候,如果初始值是空数组,则存储状态的变量的类型会自动推论为never[]
   // 解决办法: 调用useState<泛型>()传入什么类型,则状态的数据类型就被定义为什么
   const [hospitalSets, setHospitalSets] = useState<IhospitalSets>([])
+  // 存储表格数据总数的状态
+  const [total, setTotal] = useState(0)
+  // 存储一页多少条的状态
+  const [pageSize, setPageSize] = useState(5)
   // useEffect的回调,是不能够被定义为异步函数的.解决办法.给异步函数外面再套一个函数
   useEffect(() => {
     async function xxx() {
       // await promise对象, 则返回值就是promise成功之后的value值
       const result = await reqGetHospitalSets(1, 5)
       // console.log(result)
+      // 将表格数据存储起来
       setHospitalSets(result.records)
+      // 将表格数据总数存储起来
+      setTotal(result.total)
     }
     xxx()
   }, [])
@@ -190,6 +197,27 @@ export default function HospitalSet() {
         // 值写一个字符串的id,则表示每一行的key就是 这条数据的id
         // 值写一个字符串的hoscode,则表示每一行的key就是 这条数据的hoscode
         rowKey="id"
+        pagination={{
+          total, // 这个total就是告诉分页器我们总共有多少数据
+          pageSize, //告诉分页器,我们一页是5条数据
+          // 这个函数中返回值是什么,则分页器前面就展示什么
+          showTotal(total) {
+            return `总共${total}条`
+          },
+          // 显示一个下拉框,控制一页要显示多少条.其实就是修改pageSize
+          showSizeChanger: true,
+          // 自定义选择一页多少条数据的下拉框选项
+          pageSizeOptions: [2, 5, 10],
+          //展示一个快速跳转到某一页的控件
+          showQuickJumper: true,
+
+          // 监听用户操作分页器
+          // 注意: 只要操作了分页器,这个事件就会触发
+          onChange(page, pageSize) {
+            // console.log('触发了', page, pageSize)
+            setPageSize(pageSize)
+          },
+        }}
       />
     </Card>
   )
