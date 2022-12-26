@@ -85,6 +85,8 @@ const columns: ColumnsType<IhospitalSet> = [
   },
 ]
 
+let flag = false // 如果值是false,则表示用户没有点击查询按钮,如果用户点击了查询按钮,让flag为true
+
 export default function HospitalSet() {
   //创建form实例
   const [form] = Form.useForm()
@@ -95,6 +97,8 @@ export default function HospitalSet() {
   const [total, setTotal] = useState(0)
   // 存储一页多少条的状态
   const [pageSize, setPageSize] = useState(5)
+  // 存储页码的状态
+  const [page, setPage] = useState(1)
 
   // 控制表格是否展示加载效果的状态
   const [loading, setLoading] = useState(false)
@@ -105,17 +109,25 @@ export default function HospitalSet() {
   }, [])
   // 获取医院设置表格数据的函数
   async function getHospitalSets(page: number, pageSize: number) {
-    // 把表单中两个文本框的值,在这里获取
-    // 1. 通过Form.useForm 创建一个form实例对象(form对象有操作表单中内容的方法)
-    // 2. form实例还要和我们操作的Form组件进行绑定(在Form组件上写form属性值就是form实例)
-    // 3. form.getFieldsValue() 返回指定Form组件中所有表单元素的值
-    // console.log(form.getFieldsValue())
-    const { hosname, hoscode } = form.getFieldsValue()
-
     // 这个函数一进来,表示要发送请求,展示loading效果
     setLoading(true)
-    // await promise对象, 则返回值就是promise成功之后的value值
-    const result = await reqGetHospitalSets(page, pageSize, hosname, hoscode)
+    let result
+    if (flag) {
+      //flag为true,则添加筛选条件
+      // 把表单中两个文本框的值,在这里获取
+      // 1. 通过Form.useForm 创建一个form实例对象(form对象有操作表单中内容的方法)
+      // 2. form实例还要和我们操作的Form组件进行绑定(在Form组件上写form属性值就是form实例)
+      // 3. form.getFieldsValue() 返回指定Form组件中所有表单元素的值
+      // console.log(form.getFieldsValue())
+      const { hosname, hoscode } = form.getFieldsValue()
+      // await promise对象, 则返回值就是promise成功之后的value值
+      result = await reqGetHospitalSets(page, pageSize, hosname, hoscode)
+    } else {
+      // flag为false,则不添加筛选条件
+      // await promise对象, 则返回值就是promise成功之后的value值
+      result = await reqGetHospitalSets(page, pageSize)
+    }
+
     // console.log(result)
     // 将表格数据存储起来
     setHospitalSets(result.records)
@@ -128,21 +140,32 @@ export default function HospitalSet() {
   // 表单中提交按钮的事件处理函数
   const onFinish = () => {
     // console.log('Success:', values)
+    // 点击了查询按钮,就要把flag改为true
+    flag = true
     getHospitalSets(1, pageSize)
+    setPage(1) // 让页码1高亮
   }
 
   // 清空按钮的事件处理函数
   const clearForm = () => {
+    // 点击了清空按钮,就要把flag改为false
+    flag = false
     // 1. 清空表单中所有表单元素的值
     form.setFieldsValue({ hosname: undefined, hoscode: undefined })
 
     // 2. 再次发送请求获取表格数据
     getHospitalSets(1, pageSize)
+    setPage(1) //让页码1高亮
   }
 
   return (
     <Card>
       <Form
+        onChange={() => {
+          // 只要是这个表单中的任何一个表单元素的值发生变化,则这个事件处理函数就会被触发
+          // console.log('触发了')
+          flag = false //只要用户输入,flag设置为false.让用户必须点击查询按钮才能筛选数据
+        }}
         form={form}
         layout="inline" // 表示当前表单中的每一个表单元素要在一行中显示
         name="basic" // form组件的名称
@@ -230,6 +253,7 @@ export default function HospitalSet() {
         rowKey="id"
         // 控制表格中内置的分页器的属性
         pagination={{
+          current: page, // current的值是几,则对应的页码高亮
           total, // 这个total就是告诉分页器我们总共有多少数据
           pageSize, //告诉分页器,我们一页是5条数据
           // 这个函数中返回值是什么,则分页器前面就展示什么
@@ -248,6 +272,8 @@ export default function HospitalSet() {
           onChange(page, pageSize) {
             // console.log('触发了', page, pageSize)
             setPageSize(pageSize)
+            // 让用户点击之后,可以正常显示高亮效果
+            setPage(page)
 
             // 给服务器发送请求
             getHospitalSets(page, pageSize)
