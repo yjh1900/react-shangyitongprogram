@@ -103,7 +103,7 @@ export default function HospitalSet() {
     // 页面一打开就要获取一次数据
     getHospitalSets(1, 5)
   }, [])
-
+  // 获取医院设置表格数据的函数
   async function getHospitalSets(page: number, pageSize: number) {
     // 把表单中两个文本框的值,在这里获取
     // 1. 通过Form.useForm 创建一个form实例对象(form对象有操作表单中内容的方法)
@@ -228,6 +228,7 @@ export default function HospitalSet() {
         // 值写一个字符串的id,则表示每一行的key就是 这条数据的id
         // 值写一个字符串的hoscode,则表示每一行的key就是 这条数据的hoscode
         rowKey="id"
+        // 控制表格中内置的分页器的属性
         pagination={{
           total, // 这个total就是告诉分页器我们总共有多少数据
           pageSize, //告诉分页器,我们一页是5条数据
