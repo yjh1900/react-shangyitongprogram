@@ -93,19 +93,28 @@ export default function HospitalSet() {
   const [total, setTotal] = useState(0)
   // 存储一页多少条的状态
   const [pageSize, setPageSize] = useState(5)
+
+  // 控制表格是否展示加载效果的状态
+  const [loading, setLoading] = useState(false)
   // useEffect的回调,是不能够被定义为异步函数的.解决办法.给异步函数外面再套一个函数
   useEffect(() => {
-    async function xxx() {
-      // await promise对象, 则返回值就是promise成功之后的value值
-      const result = await reqGetHospitalSets(1, 5)
-      // console.log(result)
-      // 将表格数据存储起来
-      setHospitalSets(result.records)
-      // 将表格数据总数存储起来
-      setTotal(result.total)
-    }
-    xxx()
+    // 页面一打开就要获取一次数据
+    getHospitalSets(1, 5)
   }, [])
+
+  async function getHospitalSets(page: number, pageSize: number) {
+    // 这个函数一进来,表示要发送请求,展示loading效果
+    setLoading(true)
+    // await promise对象, 则返回值就是promise成功之后的value值
+    const result = await reqGetHospitalSets(page, pageSize)
+    // console.log(result)
+    // 将表格数据存储起来
+    setHospitalSets(result.records)
+    // 将表格数据总数存储起来
+    setTotal(result.total)
+    // 请求成功之后,把loading隐藏掉
+    setLoading(false)
+  }
   const onFinish = (values: any) => {
     console.log('Success:', values)
   }
@@ -216,8 +225,13 @@ export default function HospitalSet() {
           onChange(page, pageSize) {
             // console.log('触发了', page, pageSize)
             setPageSize(pageSize)
+
+            // 给服务器发送请求
+            getHospitalSets(page, pageSize)
           },
         }}
+        // 控制表格是否展示正在加载
+        loading={loading}
       />
     </Card>
   )
