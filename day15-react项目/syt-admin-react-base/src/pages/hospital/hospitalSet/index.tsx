@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { Button, Form, Input, Space, Card, Table, Tooltip } from 'antd'
 import { SearchOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons'
 // 这是ts中内置的和表格相关的一个ts类型
@@ -88,6 +89,8 @@ const columns: ColumnsType<IhospitalSet> = [
 let flag = false // 如果值是false,则表示用户没有点击查询按钮,如果用户点击了查询按钮,让flag为true
 
 export default function HospitalSet() {
+  // 得到编程式导航的函数
+  const navigate = useNavigate()
   //创建form实例
   const [form] = Form.useForm()
   // 注意: 定义状态的时候,如果初始值是空数组,则存储状态的变量的类型会自动推论为never[]
@@ -229,7 +232,14 @@ export default function HospitalSet() {
       </Form>
 
       <Space style={{ marginTop: 20, marginBottom: 20 }}>
-        <Button type="primary">添加</Button>
+        <Button
+          type="primary"
+          onClick={() => {
+            navigate(`/syt/hospital/hospitalSet/add`)
+          }}
+        >
+          添加
+        </Button>
         <Button type="primary" danger disabled>
           批量删除
         </Button>

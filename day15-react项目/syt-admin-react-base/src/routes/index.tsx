@@ -16,6 +16,9 @@ const Login = lazy(() => import('@pages/login'))
 const Dashboard = lazy(() => import('@pages/dashboard'))
 const NotFound = lazy(() => import('@pages/404'))
 const hospitalSet = lazy(() => import('@pages/hospital/hospitalSet'))
+const AddOrUpdateHospitalSet = lazy(
+  () => import('@pages/hospital/hospitalSet/components/AddOrUpdateHospitalSet')
+)
 const hospitalList = lazy(() => import('@pages/hospital/hospitalList'))
 
 const load = (Comp: FC) => {
@@ -67,6 +70,12 @@ const routes: XRoutes = [
             path: '/syt/hospital/hospitalSet',
             meta: { title: '医院设置' },
             element: load(hospitalSet),
+          },
+          {
+            path: '/syt/hospital/hospitalSet/add',
+            meta: { title: '添加医院' },
+            element: load(AddOrUpdateHospitalSet),
+            hidden: true, // 表示这个路由不再左侧导航中生成按钮
           },
           {
             path: '/syt/hospital/hospitalList',
