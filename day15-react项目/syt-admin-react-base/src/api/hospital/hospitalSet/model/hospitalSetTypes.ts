@@ -22,3 +22,12 @@ export interface IhospitalSet {
   contactsName: string
   contactsPhone: string
 }
+
+// 添加医院上传的参数的接口
+export interface IaddHosSetParams {
+  hosname: string
+  hoscode: string
+  apiUrl: string
+  contactsName: string
+  contactsPhone: string
+}

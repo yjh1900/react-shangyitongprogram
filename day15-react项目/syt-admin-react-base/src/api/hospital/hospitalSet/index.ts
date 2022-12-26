@@ -2,7 +2,7 @@
 // request 就是提前封装的好的axios实例对象
 import { request } from '@/utils/http'
 // 引入ts类型
-import { IhospitalSetsRes } from './model/hospitalSetTypes'
+import { IhospitalSetsRes, IaddHosSetParams } from './model/hospitalSetTypes'
 
 // 获取医院设置表格数据的函数
 
@@ -28,4 +28,9 @@ export const reqGetHospitalSets = (
       },
     }
   )
+}
+
+// 添加医院设置的函数
+export const reqAddHospitalSet = (data: IaddHosSetParams) => {
+  return request.post<any, null>(`/admin/hosp/hospitalSet/save`, data)
 }
