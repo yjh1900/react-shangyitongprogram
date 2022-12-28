@@ -1,5 +1,6 @@
 // 定义医院设置界面所有请求的函数
 // request 就是提前封装的好的axios实例对象
+import { Key } from 'react'
 import { request } from '@/utils/http'
 // 引入ts类型
 import { IhospitalSetsRes, IaddHosSetParams } from './model/hospitalSetTypes'
@@ -44,4 +45,10 @@ export const reqEditHospitalSet = (data: IaddHosSetParams) => {
 
 export const reqDelHospitalSet = (id: string) => {
   return request.delete<any, null>(`/admin/hosp/hospitalSet/remove/${id}`)
+}
+// 删除多条医院设置的函数
+export const reqBatchDelHospitalSet = (ids: Key[]) => {
+  return request.delete<any, null>(`/admin/hosp/hospitalSet/batchRemove`, {
+    data: ids,
+  })
 }

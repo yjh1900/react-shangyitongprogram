@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, Key } from 'react'
 import { useNavigate } from 'react-router-dom'
 import {
   Button,
@@ -23,6 +23,7 @@ import type { ColumnsType } from 'antd/es/table'
 import {
   reqGetHospitalSets,
   reqDelHospitalSet,
+  reqBatchDelHospitalSet,
 } from '@api/hospital/hospitalSet'
 import {
   IhospitalSets,
@@ -71,6 +72,9 @@ export default function HospitalSet() {
 
   // 控制表格是否展示加载效果的状态
   const [loading, setLoading] = useState(false)
+
+  // 存储表格中选中的复选框所指向的数据的id
+  const [ids, setIds] = useState<Key[]>([])
   // useEffect的回调,是不能够被定义为异步函数的.解决办法.给异步函数外面再套一个函数
   useEffect(() => {
     // 页面一打开就要获取一次数据
@@ -136,6 +140,26 @@ export default function HospitalSet() {
       async onOk() {
         // 发送请求,删除数据
         await reqDelHospitalSet(id)
+        // 提示用户
+        message.success('删除成功')
+        // 手动的从新获取表格数据
+        getHospitalSets(page, pageSize)
+      },
+      // onCancel() {
+      //   console.log('Cancel')
+      // },
+    })
+  }
+
+  // 批量删除表格数据
+  const batchDelHandle = () => {
+    confirm({
+      title: '是否确定删除?',
+      icon: <ExclamationCircleOutlined />,
+      // content: 'Some descriptions',
+      async onOk() {
+        // 发送请求,删除数据
+        await reqBatchDelHospitalSet(ids)
         // 提示用户
         message.success('删除成功')
         // 手动的从新获取表格数据
@@ -295,7 +319,12 @@ export default function HospitalSet() {
         >
           添加
         </Button>
-        <Button type="primary" danger disabled>
+        <Button
+          type="primary"
+          danger
+          disabled={!ids.length}
+          onClick={batchDelHandle}
+        >
           批量删除
         </Button>
       </Space>
@@ -346,6 +375,14 @@ export default function HospitalSet() {
         }}
         // 控制表格是否展示正在加载
         loading={loading}
+        // 添加这个属性则在表格中展示复选框
+        rowSelection={{
+          // 只要用户点击了表格的复选框,就会触发
+          onChange(selectedRowKeys, selectedRows) {
+            // console.log(selectedRowKeys, selectedRows)
+            setIds(selectedRowKeys)
+          },
+        }}
       />
     </Card>
   )
