@@ -1,21 +1,17 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Button, Form, Input, Card, Select, Space, Table } from 'antd'
 import { SearchOutlined } from '@ant-design/icons'
 import type { ColumnsType } from 'antd/es/table'
 
 import { reqGetHospitalList } from '@api/hospital/hospitalList'
+import {
+  IhospitalList,
+  IhospitalListItem,
+} from '@api/hospital/hospitalList/model/hospitalListTypes'
 // Option组件是从Select组件上解构出来的
 const { Option } = Select
 
-interface DataType {
-  key: string
-  name: string
-  age: number
-  address: string
-  tags: string[]
-}
-
-const columns: ColumnsType<DataType> = [
+const columns: ColumnsType<IhospitalListItem> = [
   {
     title: '序号',
     render: (a, b, index) => index + 1,
@@ -23,24 +19,39 @@ const columns: ColumnsType<DataType> = [
   },
   {
     title: '医院logo',
-    render() {
-      return <img src="" alt="" />
+    dataIndex: 'logoData',
+    render(data) {
+      return <img src={'data:image/png;base64,' + data} alt="" width="80" />
     },
   },
   {
     title: '医院名称',
+    dataIndex: 'hosname',
   },
   {
     title: '等级',
+    dataIndex: 'param',
+    render(data) {
+      return data.hostypeString
+    },
   },
   {
     title: '详细地址',
+    dataIndex: 'param',
+    render(data) {
+      return data.fullAddress
+    },
   },
   {
     title: '状态',
+    dataIndex: 'status',
+    render(data) {
+      return data ? '已上线' : '未上线'
+    },
   },
   {
     title: '创建时间',
+    dataIndex: 'createTime',
   },
   {
     title: '操作',
@@ -55,33 +66,21 @@ const columns: ColumnsType<DataType> = [
   },
 ]
 
-const data: DataType[] = [
-  {
-    key: '1',
-    name: 'John Brown',
-    age: 32,
-    address: 'New York No. 1 Lake Park',
-    tags: ['nice', 'developer'],
-  },
-  {
-    key: '2',
-    name: 'Jim Green',
-    age: 42,
-    address: 'London No. 1 Lake Park',
-    tags: ['loser'],
-  },
-  {
-    key: '3',
-    name: 'Joe Black',
-    age: 32,
-    address: 'Sidney No. 1 Lake Park',
-    tags: ['cool', 'teacher'],
-  },
-]
 export default function HospitalList() {
+  // 存储表格数据的状态
+  const [hospitalList, setHospitalList] = useState<IhospitalList>([])
+
+  //  分页相关的状态
+  const [page, setPage] = useState(1)
+  const [pageSize, setPageSize] = useState(5)
+  const [total, setTotal] = useState(0)
+
+  // 加载效果的状态
+  const [loading, setLoading] = useState(false)
+
   // 组件挂载,则获取表格数据
   useEffect(() => {
-    getHospitalList(1, 5)
+    getHospitalList(page, pageSize)
   }, [])
   // 表单中提交按钮的事件处理函数
   const onFinish = (values: any) => {
@@ -90,8 +89,12 @@ export default function HospitalList() {
 
   // 获取医院列表表格数据
   async function getHospitalList(page: number, pageSize: number) {
+    setLoading(true)
     const result = await reqGetHospitalList({ page, limit: pageSize })
-    console.log(result)
+    // console.log(result)
+    setHospitalList(result.content)
+    setTotal(result.totalElements)
+    setLoading(false)
   }
   return (
     <Card>
@@ -141,7 +144,29 @@ export default function HospitalList() {
           </Space>
         </Form.Item>
       </Form>
-      <Table columns={columns} dataSource={data} bordered />
+      <Table
+        loading={loading}
+        columns={columns}
+        dataSource={hospitalList}
+        bordered
+        rowKey="id"
+        pagination={{
+          total,
+          current: page,
+          pageSize,
+          showTotal(total) {
+            return `总共${total}条`
+          },
+          showSizeChanger: true,
+          showQuickJumper: true,
+          pageSizeOptions: [2, 5, 10],
+          onChange(page, pageSize) {
+            setPage(page)
+            setPageSize(pageSize)
+            getHospitalList(page, pageSize)
+          },
+        }}
+      />
     </Card>
   )
 }
