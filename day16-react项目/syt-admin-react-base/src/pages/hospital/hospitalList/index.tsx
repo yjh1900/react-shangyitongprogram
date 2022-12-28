@@ -1,7 +1,9 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Button, Form, Input, Card, Select, Space, Table } from 'antd'
 import { SearchOutlined } from '@ant-design/icons'
 import type { ColumnsType } from 'antd/es/table'
+
+import { reqGetHospitalList } from '@api/hospital/hospitalList'
 // Option组件是从Select组件上解构出来的
 const { Option } = Select
 
@@ -77,8 +79,19 @@ const data: DataType[] = [
   },
 ]
 export default function HospitalList() {
+  // 组件挂载,则获取表格数据
+  useEffect(() => {
+    getHospitalList(1, 5)
+  }, [])
+  // 表单中提交按钮的事件处理函数
   const onFinish = (values: any) => {
     console.log('Success:', values)
+  }
+
+  // 获取医院列表表格数据
+  async function getHospitalList(page: number, pageSize: number) {
+    const result = await reqGetHospitalList({ page, limit: pageSize })
+    console.log(result)
   }
   return (
     <Card>
