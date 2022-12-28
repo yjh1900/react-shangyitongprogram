@@ -39,3 +39,9 @@ export const reqAddHospitalSet = (data: IaddHosSetParams) => {
 export const reqEditHospitalSet = (data: IaddHosSetParams) => {
   return request.put<any, null>(`/admin/hosp/hospitalSet/update`, data)
 }
+
+// 删除一条医院设置的函数
+
+export const reqDelHospitalSet = (id: string) => {
+  return request.delete<any, null>(`/admin/hosp/hospitalSet/remove/${id}`)
+}

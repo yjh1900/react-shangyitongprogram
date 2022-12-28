@@ -1,11 +1,29 @@
 import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Button, Form, Input, Space, Card, Table, Tooltip } from 'antd'
-import { SearchOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons'
+import {
+  Button,
+  Form,
+  Input,
+  Space,
+  Card,
+  Table,
+  Tooltip,
+  Modal,
+  message,
+} from 'antd'
+import {
+  SearchOutlined,
+  EditOutlined,
+  DeleteOutlined,
+  ExclamationCircleOutlined,
+} from '@ant-design/icons'
 // 这是ts中内置的和表格相关的一个ts类型
 import type { ColumnsType } from 'antd/es/table'
 
-import { reqGetHospitalSets } from '@api/hospital/hospitalSet'
+import {
+  reqGetHospitalSets,
+  reqDelHospitalSet,
+} from '@api/hospital/hospitalSet'
 import {
   IhospitalSets,
   IhospitalSet,
@@ -32,6 +50,9 @@ import {
 // ]
 
 let flag = false // 如果值是false,则表示用户没有点击查询按钮,如果用户点击了查询按钮,让flag为true
+
+// 从Modal上解构,真正弹出询问窗口的方法
+const { confirm } = Modal
 
 export default function HospitalSet() {
   // 得到编程式导航的函数
@@ -106,6 +127,26 @@ export default function HospitalSet() {
     setPage(1) //让页码1高亮
   }
 
+  // 点击删除按钮,弹出模态框的代码
+  const showConfirm = (id: string) => () => {
+    confirm({
+      title: '是否确定删除',
+      icon: <ExclamationCircleOutlined />,
+      // content: 'Some descriptions',
+      async onOk() {
+        // 发送请求,删除数据
+        await reqDelHospitalSet(id)
+        // 提示用户
+        message.success('删除成功')
+        // 手动的从新获取表格数据
+        getHospitalSets(page, pageSize)
+      },
+      // onCancel() {
+      //   console.log('Cancel')
+      // },
+    })
+  }
+
   // 注意:  ColumnsType<泛型> 这个泛型是要展示的数据数组中的对象的ts类型
   const columns: ColumnsType<IhospitalSet> = [
     {
@@ -158,7 +199,12 @@ export default function HospitalSet() {
               ></Button>
             </Tooltip>
             <Tooltip title="删除医院">
-              <Button icon={<DeleteOutlined />} type="primary" danger></Button>
+              <Button
+                icon={<DeleteOutlined />}
+                type="primary"
+                danger
+                onClick={showConfirm(data.id)}
+              ></Button>
             </Tooltip>
           </Space>
         )
