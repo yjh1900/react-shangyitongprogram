@@ -23,6 +23,9 @@ const hospitalList = lazy(() => import('@pages/hospital/hospitalList'))
 const HospitalShow = lazy(
   () => import('@pages/hospital/hospitalList/components/HospitalShow')
 )
+const HospitalSchedule = lazy(
+  () => import('@pages/hospital/hospitalList/components/HospitalSchedule')
+)
 
 const load = (Comp: FC) => {
   return (
@@ -95,6 +98,12 @@ const routes: XRoutes = [
             path: '/syt/hospital/hospitalList/show/:id',
             meta: { title: '医院详情' },
             element: load(HospitalShow),
+            hidden: true, // 表示这个路由不再左侧导航中生成按钮
+          },
+          {
+            path: '/syt/hospital/hospitalList/schedule/:hoscode',
+            meta: { title: '医院排班' },
+            element: load(HospitalSchedule),
             hidden: true, // 表示这个路由不再左侧导航中生成按钮
           },
         ],

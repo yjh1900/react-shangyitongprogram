@@ -156,7 +156,14 @@ export default function HospitalList() {
           >
             查看
           </Button>
-          <Button type="primary">排班</Button>
+          <Button
+            type="primary"
+            onClick={() => {
+              navigate(`/syt/hospital/hospitalList/schedule/${_.hoscode}`)
+            }}
+          >
+            排班
+          </Button>
           <Button type="primary">上线</Button>
         </Space>
       ),

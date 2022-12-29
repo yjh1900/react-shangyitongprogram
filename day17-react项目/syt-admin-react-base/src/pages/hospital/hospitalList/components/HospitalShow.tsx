@@ -7,7 +7,6 @@ export default function HospitalShow() {
   const [hospitalDetail, setHospitalDetail] = useState<IhospitalDetail>({})
   // 路由参数: 医院的id
   const { id } = useParams()
-  //   console.log(id)
 
   useEffect(() => {
     // 组件挂载,获取医院详情数据
