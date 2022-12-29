@@ -71,7 +71,10 @@ const columns: ColumnsType<IhospitalListItem> = [
   },
 ]
 
+let flag = false //为true,则添加筛选条件,为false则添加筛选条件
+
 export default function HospitalList() {
+  const [form] = Form.useForm()
   // 存储表格数据的状态
   const [hospitalList, setHospitalList] = useState<IhospitalList>([])
 
@@ -87,6 +90,8 @@ export default function HospitalList() {
   const [province, setProvince] = useState<IdictList>([])
   const [city, setCity] = useState<IdictList>([])
   const [district, setDistrict] = useState<IdictList>([])
+  // 医院类型的数据状态
+  const [hostype, setHostype] = useState<IdictList>([])
 
   // 组件挂载,则获取表格数据
   useEffect(() => {
@@ -94,16 +99,34 @@ export default function HospitalList() {
     getHospitalList(page, pageSize)
     //获取省数据
     getProvince()
+
+    // 获取医院类型的数据
+    getHostype()
   }, [])
+
   // 表单中提交按钮的事件处理函数
   const onFinish = (values: any) => {
-    console.log('Success:', values)
+    // console.log('Success:', values)
+    flag = true
+    getHospitalList(1, pageSize)
+    setPage(1)
   }
 
   // 获取医院列表表格数据
   async function getHospitalList(page: number, pageSize: number) {
     setLoading(true)
-    const result = await reqGetHospitalList({ page, limit: pageSize })
+    let result
+    if (flag) {
+      // 带筛选条件
+      // data就是筛选表单中所有表单项的数据
+      const data = form.getFieldsValue()
+      // 注意: data中的数据属性刚好要和上传的数据属性一致.所以直接展示传入即可
+      result = await reqGetHospitalList({ page, limit: pageSize, ...data })
+    } else {
+      // 不带筛选条件
+      result = await reqGetHospitalList({ page, limit: pageSize })
+    }
+
     // console.log(result)
     setHospitalList(result.content)
     setTotal(result.totalElements)
@@ -126,9 +149,31 @@ export default function HospitalList() {
     // console.log(result)
     setDistrict(result)
   }
+  async function getHostype() {
+    const result = await reqGetCoDoT('10000')
+    // console.log(result)
+    setHostype(result)
+  }
   return (
     <Card>
-      <Form name="basic" onFinish={onFinish} layout="inline">
+      <Form
+        name="basic"
+        onFinish={onFinish}
+        layout="inline"
+        form={form}
+        // 文本框时触发
+        // onChange={() => {
+        //   console.log('触发了')
+        // }}
+        // 点击下拉框触发
+        // onSelect={() => {
+        //   console.log('重新选择了')
+        // }}
+        // 只要表单的值变化则触发
+        onValuesChange={() => {
+          flag = false
+        }}
+      >
         <Form.Item name="provinceCode" style={{ width: 200, marginBottom: 20 }}>
           <Select
             placeholder="请选择省"
@@ -136,6 +181,11 @@ export default function HospitalList() {
               // console.log(value)
               // 获取市的数据
               getCity(provinceCode)
+              //清空市和区
+              form.setFieldsValue({
+                cityCode: undefined,
+                districtCode: undefined,
+              })
             }}
           >
             {province.map((item) => {
@@ -152,6 +202,10 @@ export default function HospitalList() {
             placeholder="请选择市"
             onSelect={(cityCode: string) => {
               getDistrict(cityCode)
+              //清空区
+              form.setFieldsValue({
+                districtCode: undefined,
+              })
             }}
           >
             {city.map((item) => {
@@ -184,7 +238,13 @@ export default function HospitalList() {
         </Form.Item>
         <Form.Item name="hostype" style={{ width: 200, marginBottom: 20 }}>
           <Select placeholder="医院类型">
-            <Option value="1">三级甲等</Option>
+            {hostype.map((item) => {
+              return (
+                <Option key={item.id} value={item.value}>
+                  {item.name}
+                </Option>
+              )
+            })}
           </Select>
         </Form.Item>
         <Form.Item name="status" style={{ width: 200, marginBottom: 20 }}>
@@ -200,7 +260,18 @@ export default function HospitalList() {
             <Button type="primary" htmlType="submit" icon={<SearchOutlined />}>
               查询
             </Button>
-            <Button>清空</Button>
+            <Button
+              onClick={() => {
+                // 清空表单
+                // form.setFieldsValue({属性:值})
+                form.resetFields() //重置表单
+                flag = false
+                getHospitalList(1, pageSize)
+                setPage(1)
+              }}
+            >
+              清空
+            </Button>
           </Space>
         </Form.Item>
       </Form>
