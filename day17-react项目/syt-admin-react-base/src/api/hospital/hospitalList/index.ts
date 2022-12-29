@@ -6,6 +6,7 @@ import {
   IhospitalListRes,
   IdictList,
   IhospitalDetail,
+  IdepList,
 } from './model/hospitalListTypes'
 // 获取医院列表表格数据的函数
 export function reqGetHospitalList({
@@ -50,4 +51,9 @@ export function reqGetCoDoT(parentId: string) {
 // 获取详情的函数
 export function reqGetHospitalDetail(id: string) {
   return request.get<any, IhospitalDetail>(`/admin/hosp/hospital/show/${id}`)
+}
+
+// 获取所有科室数据
+export function reqGetDepList(hoscode: string) {
+  return request.get<any, IdepList>(`/admin/hosp/department/${hoscode}`)
 }

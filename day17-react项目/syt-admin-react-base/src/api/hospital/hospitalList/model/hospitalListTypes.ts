@@ -83,3 +83,11 @@ export interface IhospitalDetail {
   bookingRule?: IbookingRule
   hospital?: Ihospital
 }
+
+// 所有科室数据的接口
+export type IdepList = IdepItem[]
+export interface IdepItem {
+  depcode: string
+  depname: string
+  children: IdepList
+}

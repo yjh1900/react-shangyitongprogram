@@ -1,8 +1,10 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { Card, Tree, Tag, Pagination, Table, Button, Row, Col } from 'antd'
 import type { DataNode, TreeProps } from 'antd/es/tree'
 import type { ColumnsType } from 'antd/es/table'
+import { reqGetDepList } from '@api/hospital/hospitalList'
+import { IdepList } from '@api/hospital/hospitalList/model/hospitalListTypes'
 const treeData: DataNode[] = [
   {
     title: 'parent 1',
@@ -66,6 +68,19 @@ const columns: ColumnsType<{ name: string }> = [
 export default function HospitalSchedule() {
   const { hoscode } = useParams()
 
+  // 存储科室数据的状态
+  const [depList, setDepList] = useState<IdepList>([])
+
+  useEffect(() => {
+    //组件挂载获取科室数据
+    getDepList()
+  }, [])
+  // 获取所有科室
+  async function getDepList() {
+    const result = await reqGetDepList(hoscode as string)
+    setDepList(result)
+  }
+
   const onSelect: TreeProps['onSelect'] = (selectedKeys, info) => {
     console.log('selected', selectedKeys, info)
   }
@@ -92,7 +107,13 @@ export default function HospitalSchedule() {
             // defaultCheckedKeys={['0-0-0', '0-0-1']}
             onSelect={onSelect} //选中节点的时候触发
             // onCheck={onCheck} // 点击复选框的时候触发的事件
-            treeData={treeData} // 树结构要渲染的数据
+            // 目前Tree组件的数据结构类型,默认要求是DataNode类型的,但是我们实际数据绝对不是,所以暂时只能将我们的数据断言为any类型
+            treeData={depList as any} // 树结构要渲染的数据
+            //注意: Tree组件默认使用数据对象中的title属性,作为节点的名称渲染.key属性作为节点的id.但是我们的数据没有title和key.所以可以利用下面的属性进行自定义
+            fieldNames={{
+              title: 'depname',
+              key: 'depcode',
+            }}
           />
         </Col>
         <Col span={20}>
