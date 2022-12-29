@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { Button, Form, Input, Card, Select, Space, Table } from 'antd'
 import { SearchOutlined } from '@ant-design/icons'
 import type { ColumnsType } from 'antd/es/table'
+import { useNavigate } from 'react-router-dom'
 
 import {
   reqGetHospitalList,
@@ -16,64 +17,10 @@ import {
 // Option组件是从Select组件上解构出来的
 const { Option } = Select
 
-const columns: ColumnsType<IhospitalListItem> = [
-  {
-    title: '序号',
-    render: (a, b, index) => index + 1,
-    align: 'center',
-  },
-  {
-    title: '医院logo',
-    dataIndex: 'logoData',
-    render(data) {
-      return <img src={'data:image/png;base64,' + data} alt="" width="80" />
-    },
-  },
-  {
-    title: '医院名称',
-    dataIndex: 'hosname',
-  },
-  {
-    title: '等级',
-    dataIndex: 'param',
-    render(data) {
-      return data.hostypeString
-    },
-  },
-  {
-    title: '详细地址',
-    dataIndex: 'param',
-    render(data) {
-      return data.fullAddress
-    },
-  },
-  {
-    title: '状态',
-    dataIndex: 'status',
-    render(data) {
-      return data ? '已上线' : '未上线'
-    },
-  },
-  {
-    title: '创建时间',
-    dataIndex: 'createTime',
-  },
-  {
-    title: '操作',
-    render: (_, record) => (
-      <Space size="middle">
-        <Button type="primary">查看</Button>
-        <Button type="primary">排班</Button>
-        <Button type="primary">上线</Button>
-      </Space>
-    ),
-    width: 200,
-  },
-]
-
 let flag = false //为true,则添加筛选条件,为false则添加筛选条件
 
 export default function HospitalList() {
+  const navigate = useNavigate()
   const [form] = Form.useForm()
   // 存储表格数据的状态
   const [hospitalList, setHospitalList] = useState<IhospitalList>([])
@@ -154,6 +101,68 @@ export default function HospitalList() {
     // console.log(result)
     setHostype(result)
   }
+
+  const columns: ColumnsType<IhospitalListItem> = [
+    {
+      title: '序号',
+      render: (a, b, index) => index + 1,
+      align: 'center',
+    },
+    {
+      title: '医院logo',
+      dataIndex: 'logoData',
+      render(data) {
+        return <img src={'data:image/png;base64,' + data} alt="" width="80" />
+      },
+    },
+    {
+      title: '医院名称',
+      dataIndex: 'hosname',
+    },
+    {
+      title: '等级',
+      dataIndex: 'param',
+      render(data) {
+        return data.hostypeString
+      },
+    },
+    {
+      title: '详细地址',
+      dataIndex: 'param',
+      render(data) {
+        return data.fullAddress
+      },
+    },
+    {
+      title: '状态',
+      dataIndex: 'status',
+      render(data) {
+        return data ? '已上线' : '未上线'
+      },
+    },
+    {
+      title: '创建时间',
+      dataIndex: 'createTime',
+    },
+    {
+      title: '操作',
+      render: (_, record) => (
+        <Space size="middle">
+          <Button
+            type="primary"
+            onClick={() => {
+              navigate(`/syt/hospital/hospitalList/show/${_.id}`)
+            }}
+          >
+            查看
+          </Button>
+          <Button type="primary">排班</Button>
+          <Button type="primary">上线</Button>
+        </Space>
+      ),
+      width: 200,
+    },
+  ]
   return (
     <Card>
       <Form
