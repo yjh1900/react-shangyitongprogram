@@ -101,6 +101,10 @@ export default function HospitalSchedule() {
     console.log('selected', selectedKeys, info)
   }
 
+  //动态计算Tree组件盒子的高度
+  // 当前页面可视区高度 - header组件的高度(64) - Tabs组件的高度(34) - Card组件的内边距(24) - 面包屑的高度(36)
+  const height = document.documentElement.clientHeight - 64 - 34 - 24 - 36
+
   return (
     <Card>
       <p>选择：北京人民医院 / 多发性硬化专科门诊 / 2022-04-05</p>
@@ -111,7 +115,7 @@ export default function HospitalSchedule() {
           <Tree
             style={{
               border: '1px solid #ccc',
-              height: 300,
+              height,
               overflow: 'scroll',
             }}
             // checkable //是否展示复选框
