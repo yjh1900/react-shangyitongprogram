@@ -8,6 +8,7 @@ import {
   IhospitalDetail,
   IdepList,
   IscheduleRuleRes,
+  IscheduleDetailList,
 } from './model/hospitalListTypes'
 // 获取医院列表表格数据的函数
 export function reqGetHospitalList({
@@ -68,5 +69,16 @@ export function reqGetScheduleRules(
 ) {
   return request.get<any, IscheduleRuleRes>(
     `/admin/hosp/schedule/getScheduleRule/${page}/${limit}/${hoscode}/${depcode}`
+  )
+}
+
+// 获取排班详情
+export function reqGetScheduleDetail(
+  hoscode: string,
+  depcode: string,
+  workDate: string
+) {
+  return request.get<any, IscheduleDetailList>(
+    `/admin/hosp/schedule/findScheduleList/${hoscode}/${depcode}/${workDate}`
   )
 }

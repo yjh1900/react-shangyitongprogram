@@ -112,3 +112,15 @@ export interface IscheduleRuleRes {
     hosname: string
   }
 }
+
+// 排班详情数据接口
+export interface IscheduleDetail {
+  id: string
+  title: string
+  skill: string
+  workDate: string
+  reservedNumber: number
+  availableNumber: number
+  amount: number
+}
+export type IscheduleDetailList = IscheduleDetail[]
