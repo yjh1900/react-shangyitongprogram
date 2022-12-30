@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom'
 import { Card, Tree, Tag, Pagination, Table, Button, Row, Col } from 'antd'
 import type { DataNode, TreeProps } from 'antd/es/tree'
 import type { ColumnsType } from 'antd/es/table'
-import { reqGetDepList } from '@api/hospital/hospitalList'
+import { reqGetDepList, reqGetScheduleRules } from '@api/hospital/hospitalList'
 import { IdepList } from '@api/hospital/hospitalList/model/hospitalListTypes'
 const treeData: DataNode[] = [
   {
@@ -73,10 +73,22 @@ export default function HospitalSchedule() {
 
   // 存储所有一级科室depcode的状态
   const [depCodes, setDepCodes] = useState<string[]>([])
+  // 科室排班规则分页的状态
+  const [page, setPage] = useState(1)
+  const [pageSize, setPageSize] = useState(5)
+  const [total, setTotal] = useState(0)
 
   useEffect(() => {
-    //组件挂载获取科室数据
-    getDepList()
+    async function fetch() {
+      //组件挂载获取科室数据
+      // getDepList是一个异步函数,异步函数的返回值是promise对象.所以前面可以加await
+      // 当一个异步函数里面所有的代码执行完毕了.则这个异步函数返回的promise对象的状态就变成了成功
+      const depcode = await getDepList()
+      // console.log(depcode)
+
+      getScheduleRules(page, pageSize, depcode)
+    }
+    fetch()
   }, [])
   // 获取所有科室
   async function getDepList() {
@@ -95,6 +107,24 @@ export default function HospitalSchedule() {
     setDepCodes(depcodes)
 
     setDepList(result)
+
+    // 一个异步函数,可以写返回值.这个返回值最终会添加给异步函数返回的promise对象,成功之后的value属性的值
+    return result[0].children[0].depcode
+  }
+
+  // 获取指定科室的排班规则数据
+  async function getScheduleRules(
+    page: number,
+    pageSize: number,
+    depcode: string
+  ) {
+    const result = await reqGetScheduleRules(
+      page,
+      pageSize,
+      hoscode as string,
+      depcode
+    )
+    console.log(result)
   }
 
   const onSelect: TreeProps['onSelect'] = (selectedKeys, info) => {

@@ -92,3 +92,23 @@ export interface IdepItem {
   children: IdepList
   disabled?: boolean
 }
+
+// 排班规则数据接口
+
+// 排班规则数据对象接口
+export interface IscheduleRuleItem {
+  workDate: string
+  dayOfWeek: string
+  reservedNumber: number
+  availableNumber: number
+}
+
+export type IscheduleRuleList = IscheduleRuleItem[]
+
+export interface IscheduleRuleRes {
+  total: number
+  bookingScheduleList: IscheduleRuleList
+  baseMap: {
+    hosname: string
+  }
+}

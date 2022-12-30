@@ -7,6 +7,7 @@ import {
   IdictList,
   IhospitalDetail,
   IdepList,
+  IscheduleRuleRes,
 } from './model/hospitalListTypes'
 // 获取医院列表表格数据的函数
 export function reqGetHospitalList({
@@ -56,4 +57,16 @@ export function reqGetHospitalDetail(id: string) {
 // 获取所有科室数据
 export function reqGetDepList(hoscode: string) {
   return request.get<any, IdepList>(`/admin/hosp/department/${hoscode}`)
+}
+
+// 获取排班规则方法
+export function reqGetScheduleRules(
+  page: number,
+  limit: number,
+  hoscode: string,
+  depcode: string
+) {
+  return request.get<any, IscheduleRuleRes>(
+    `/admin/hosp/schedule/getScheduleRule/${page}/${limit}/${hoscode}/${depcode}`
+  )
 }
