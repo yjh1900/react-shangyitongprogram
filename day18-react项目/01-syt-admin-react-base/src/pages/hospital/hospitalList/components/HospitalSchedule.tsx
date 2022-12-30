@@ -1,6 +1,16 @@
 import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
-import { Card, Tree, Tag, Pagination, Table, Button, Row, Col } from 'antd'
+import {
+  Card,
+  Tree,
+  Tag,
+  Pagination,
+  Table,
+  Button,
+  Row,
+  Col,
+  message,
+} from 'antd'
 import type { DataNode, TreeProps } from 'antd/es/tree'
 import type { ColumnsType } from 'antd/es/table'
 import {
@@ -159,11 +169,14 @@ export default function HospitalSchedule() {
       depcode
     )
     // console.log(result)
+    setTotal(result.total)
     setScheduleRule(result.bookingScheduleList)
     setHosname(result.baseMap.hosname)
-    setWorkDate(result.bookingScheduleList[0].workDate)
+    const workDate = result.bookingScheduleList[0]?.workDate
+    // 如果没有workDate,说明当前医院没有数据
+    if (!workDate) return message.error('当前科室,暂无数据')
+    setWorkDate(workDate)
 
-    const workDate = result.bookingScheduleList[0].workDate
     // 获取排班详情
     getScheduleDetail(depcode, workDate)
   }
@@ -178,8 +191,15 @@ export default function HospitalSchedule() {
     setScheduleDetail(result)
   }
 
-  const onSelect: TreeProps['onSelect'] = (selectedKeys, info) => {
-    console.log('selected', selectedKeys, info)
+  const onSelect: TreeProps['onSelect'] = (selectedKeys, info: any) => {
+    // console.log('selected', selectedKeys, info)
+    // 修改全局变量depcode
+    depcode = selectedKeys[0] as string
+    // 修改面包屑的depname
+    setDepname(info.node.depname)
+    // 重新获取科室的排班数据
+    getScheduleRules(1, pageSize, depcode)
+    setPage(1)
   }
 
   //动态计算Tree组件盒子的高度
@@ -244,8 +264,17 @@ export default function HospitalSchedule() {
 
           {/* 之前在table中使用分页写的所有的属性,在这里都可以使用.只是原来是写在对象里面.现在这些属性,直接写在组件上即可 */}
           <Pagination
+            current={page}
+            total={total}
+            pageSize={pageSize}
             showSizeChanger={true}
             style={{ marginTop: 10 }}
+            onChange={(page, pageSize) => {
+              setPage(page)
+              setPageSize(pageSize)
+
+              getScheduleRules(page, pageSize, depcode)
+            }}
           ></Pagination>
 
           <Table

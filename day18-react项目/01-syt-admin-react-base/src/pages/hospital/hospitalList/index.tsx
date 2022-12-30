@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Button, Form, Input, Card, Select, Space, Table } from 'antd'
+import { Button, Form, Input, Card, Select, Space, Table, message } from 'antd'
 import { SearchOutlined } from '@ant-design/icons'
 import type { ColumnsType } from 'antd/es/table'
 import { useNavigate } from 'react-router-dom'
@@ -8,6 +8,7 @@ import {
   reqGetHospitalList,
   reqGetProvince,
   reqGetCoDoT,
+  reqUpdateHospitalStatus,
 } from '@api/hospital/hospitalList'
 import {
   IhospitalList,
@@ -164,7 +165,16 @@ export default function HospitalList() {
           >
             排班
           </Button>
-          <Button type="primary">上线</Button>
+          <Button
+            type="primary"
+            onClick={async () => {
+              await reqUpdateHospitalStatus(_.id, _.status ? 0 : 1)
+              message.success(_.status ? '下线成功' : '上线成功')
+              getHospitalList(page, pageSize)
+            }}
+          >
+            {_.status ? '下线' : '上线'}
+          </Button>
         </Space>
       ),
       width: 200,
